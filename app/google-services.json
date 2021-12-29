@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "324000330631",
+    "firebase_url": "https://mdp5-1820a-default-rtdb.firebaseio.com",
+    "project_id": "mdp5-1820a",
+    "storage_bucket": "mdp5-1820a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324000330631:android:2fb3db3d4a430676bb5922",
+        "android_client_info": {
+          "package_name": "com.example.chatapp2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324000330631-c86rogd353gncder93gku223g8ci1226.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp9Ub7jCNOJQmZ_PtQ9s7cJ0dileOhbyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324000330631-c86rogd353gncder93gku223g8ci1226.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324000330631:android:399f122bc1a37370bb5922",
+        "android_client_info": {
+          "package_name": "id.web.wazapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324000330631-c86rogd353gncder93gku223g8ci1226.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp9Ub7jCNOJQmZ_PtQ9s7cJ0dileOhbyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324000330631-c86rogd353gncder93gku223g8ci1226.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
