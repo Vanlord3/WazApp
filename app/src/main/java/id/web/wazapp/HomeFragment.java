@@ -7,13 +7,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +36,14 @@ public class HomeFragment extends Fragment {
     ImageButton ivbSignOut,ivAddFriend;
 
     ArrayList<Friends> listFriends = new ArrayList<>();
+    ArrayList<User> listUser = new ArrayList<>();
     AppDatabase db;
+
+    TextView tvRequestFriend,tvFriends;
+    ImageView ivDropdown1,ivDropdown2;
+
+    RecyclerView rvRequestFriend,rvAllFriend;
+    RequestedFriendsAdapter requestedFriendsAdapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,11 +97,46 @@ public class HomeFragment extends Fragment {
         tvName = view.findViewById(R.id.tvName);
         ivbSignOut = view.findViewById(R.id.imageButton);
         ivAddFriend = view.findViewById(R.id.imageButton2);
+        tvRequestFriend = view.findViewById(R.id.textView8);
+        tvFriends = view.findViewById(R.id.textView9);
+        ivDropdown1 = view.findViewById(R.id.imageView9);
+        ivDropdown2 = view.findViewById(R.id.imageView8);
+
+        rvRequestFriend = view.findViewById(R.id.rvRequestedFriends);
+        rvAllFriend = view.findViewById(R.id.rvAllFriends);
+
+        rvAllFriend.setHasFixedSize(true);
+        rvAllFriend.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        rvRequestFriend.setHasFixedSize(true);
+        rvRequestFriend.setLayoutManager(new LinearLayoutManager(getContext()));
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        Log.d("UID:", FirebaseAuth.getInstance().getUid());
+
         db = Room.databaseBuilder(getContext(), AppDatabase.class, "DBProject").build();
         new getFriends().execute();
+        new getUser().execute();
+
+//        for(User u:listUser){
+//            for (Friends f:listFriends){
+//                if(f.getIdsender_request().equalsIgnoreCase(FirebaseAuth.getInstance().getUid()) || f.getIdreceiver_request().equalsIgnoreCase(FirebaseAuth.getInstance().getUid())){
+//                    if(f.getStatus() == 0){
+//                        requestedFriendsAdapter = new RequestedFriendsAdapter(getContext(),listFriends,listUser);
+//                        rvRequestFriend.setAdapter(requestedFriendsAdapter);
+//                    }
+//                    else{
+//
+//                    }
+//                }
+//            }
+//        }
+
+
+        requestedFriendsAdapter = new RequestedFriendsAdapter(getContext(),listFriends,listUser);
+        rvRequestFriend.setAdapter(requestedFriendsAdapter);
+//        Log.d("Friends:",listFriends.toString());
 
         if(firebaseUser!=null){
             tvName.setText(firebaseUser.getDisplayName());
@@ -103,6 +150,46 @@ public class HomeFragment extends Fragment {
         ivAddFriend.setOnClickListener(view1 -> {
             startActivity(new Intent(getContext(),AddFriendActivity.class));
         });
+
+        tvRequestFriend.setOnClickListener(view1 -> {
+            if(ivDropdown1.getTag().toString().equalsIgnoreCase("1")){
+                ivDropdown1.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24);
+                ivDropdown1.setTag("2");
+            }
+            else{
+                ivDropdown1.setImageResource(R.drawable.ic_baseline_arrow_right_24);
+                ivDropdown1.setTag("1");
+            }
+        });
+        tvFriends.setOnClickListener(view1 -> {
+            if(ivDropdown2.getTag().toString().equalsIgnoreCase("1")){
+                ivDropdown2.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24);
+                ivDropdown2.setTag("2");
+            }
+            else{
+                ivDropdown2.setImageResource(R.drawable.ic_baseline_arrow_right_24);
+                ivDropdown2.setTag("1");
+            }
+        });
+
+
+
+    }
+
+    private class getUser extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            listUser.clear();
+            listUser.addAll(db.userDAO().getUser());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
     }
 
     private class getFriends extends AsyncTask<Void, Void, Void> {
@@ -117,7 +204,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//            UserAdapter.notifyDataSetChanged();
         }
     }
 
@@ -133,8 +219,6 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             new getFriends().execute();
-//            etUser.setText("");
-//            etJumlah.setText("");
         }
     }
 }

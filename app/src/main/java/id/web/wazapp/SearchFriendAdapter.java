@@ -1,14 +1,20 @@
 package id.web.wazapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -18,8 +24,9 @@ import java.util.ArrayList;
 public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapter.itemViewHolder>{
     private Context context;
     private ArrayList<User> listUser;
-    private CharSequence chars;
     User u;
+    AppDatabase db;
+    ArrayList<Friends> listFriends;
 
     public SearchFriendAdapter(Context context, ArrayList<User> listUser) {
         this.context = context;
@@ -39,8 +46,15 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
         holder.tvUsername.setText(u.getUsername());
         holder.tvName.setText(u.getName());
 
-        holder.ivbAdd.setOnClickListener(view -> {
+        db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "DBProject").build();
+//        new getFriends().execute();
 
+        holder.ivbAdd.setOnClickListener(view -> {
+            Friends f = new Friends(FirebaseAuth.getInstance().getUid(),u.getId(),0);
+            new insertFriends().execute(f);
+//            db.friendsDAO().insertFriends(f);
+            context.startActivity(new Intent(context.getApplicationContext(),Setup.class));
+//            Toast.makeText(context.getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -60,6 +74,39 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
             ivbAdd = itemView.findViewById(R.id.imageButtonAdd);
 
 
+        }
+    }
+//    private class getFriends extends AsyncTask<Void, Void, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            listFriends.clear();
+//            listFriends.addAll(db.friendsDAO().getFriends());
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+////            UserAdapter.notifyDataSetChanged();
+//        }
+//    }
+
+    private class insertFriends extends AsyncTask<Friends, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Friends... Friends) {
+            db.friendsDAO().insertFriends(Friends[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(context.getApplicationContext(), "Sukses", Toast.LENGTH_SHORT).show();
+//            new getFriends().execute();
+//            etUser.setText("");
+//            etJumlah.setText("");
         }
     }
 }

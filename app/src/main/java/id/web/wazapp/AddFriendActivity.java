@@ -70,7 +70,7 @@ public class AddFriendActivity extends AppCompatActivity {
             listUser.addAll(db.userDAO().getUser());
             Log.i("Data: ",listUser.toString());
             searchFriendAdapter = new SearchFriendAdapter(AddFriendActivity.this, listUser);
-            rvResults.setAdapter(searchFriendAdapter);
+            rvResults.setAdapter(null);
             return null;
         }
 
@@ -84,11 +84,11 @@ public class AddFriendActivity extends AppCompatActivity {
         ArrayList<User> filteredlist = new ArrayList<>();
 
         if(s.length()==0){
-            rvResults.setAdapter(new SearchFriendAdapter(AddFriendActivity.this,listUser));
+            rvResults.setAdapter(null);
         }
         else{
             for(User user : listUser){
-                if(user.getUsername().toLowerCase().contains(s)){
+                if(user.getUsername().toLowerCase().contains(s) && !user.getId().equalsIgnoreCase(FirebaseAuth.getInstance().getUid())){
                     filteredlist.add(user);
                 }
             }
