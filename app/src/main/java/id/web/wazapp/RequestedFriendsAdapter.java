@@ -1,6 +1,7 @@
 package id.web.wazapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,9 +79,14 @@ public class RequestedFriendsAdapter extends RecyclerView.Adapter<RequestedFrien
                 Log.d("Selected:",String.valueOf(f.getId()));
                 f.setStatus(1);
                 new updateFriends().execute(f);
+                context.startActivity(new Intent(context.getApplicationContext(),Setup.class));
+//                notifyDataSetChanged();
             }
             else{
+                new deleteFriends().execute(f);
                 Toast.makeText(context.getApplicationContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();
+                context.startActivity(new Intent(context.getApplicationContext(),Setup.class));
+
             }
         });
 
@@ -134,6 +140,22 @@ public class RequestedFriendsAdapter extends RecyclerView.Adapter<RequestedFrien
 //            new getFriends().execute();
 //            etBarang.setText("");
 //            etJumlah.setText("");
+        }
+    }
+
+    private class deleteFriends extends AsyncTask<Friends, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Friends... Friendss) {
+            db.friendsDAO().deleteFriends(Friendss[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+//            new getFriends().execute();
+            notifyDataSetChanged();
         }
     }
 }

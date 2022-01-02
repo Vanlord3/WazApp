@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment {
 
     RecyclerView rvRequestFriend,rvAllFriend;
     RequestedFriendsAdapter requestedFriendsAdapter;
+    AllFriendsAdapter allFriendsAdapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -113,30 +114,11 @@ public class HomeFragment extends Fragment {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Log.d("UID:", FirebaseAuth.getInstance().getUid());
+//        Log.d("UID:", FirebaseAuth.getInstance().getUid());
 
         db = Room.databaseBuilder(getContext(), AppDatabase.class, "DBProject").build();
         new getFriends().execute();
         new getUser().execute();
-
-//        for(User u:listUser){
-//            for (Friends f:listFriends){
-//                if(f.getIdsender_request().equalsIgnoreCase(FirebaseAuth.getInstance().getUid()) || f.getIdreceiver_request().equalsIgnoreCase(FirebaseAuth.getInstance().getUid())){
-//                    if(f.getStatus() == 0){
-//                        requestedFriendsAdapter = new RequestedFriendsAdapter(getContext(),listFriends,listUser);
-//                        rvRequestFriend.setAdapter(requestedFriendsAdapter);
-//                    }
-//                    else{
-//
-//                    }
-//                }
-//            }
-//        }
-
-
-        requestedFriendsAdapter = new RequestedFriendsAdapter(getContext(),listFriends,listUser);
-        rvRequestFriend.setAdapter(requestedFriendsAdapter);
-//        Log.d("Friends:",listFriends.toString());
 
         if(firebaseUser!=null){
             tvName.setText(firebaseUser.getDisplayName());
@@ -151,24 +133,31 @@ public class HomeFragment extends Fragment {
             startActivity(new Intent(getContext(),AddFriendActivity.class));
         });
 
+        rvAllFriend.setVisibility(View.GONE);
+        rvRequestFriend.setVisibility(View.GONE);
+
         tvRequestFriend.setOnClickListener(view1 -> {
             if(ivDropdown1.getTag().toString().equalsIgnoreCase("1")){
                 ivDropdown1.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24);
                 ivDropdown1.setTag("2");
+                rvRequestFriend.setVisibility(View.VISIBLE);
             }
             else{
                 ivDropdown1.setImageResource(R.drawable.ic_baseline_arrow_right_24);
                 ivDropdown1.setTag("1");
+                rvRequestFriend.setVisibility(View.GONE);
             }
         });
         tvFriends.setOnClickListener(view1 -> {
             if(ivDropdown2.getTag().toString().equalsIgnoreCase("1")){
                 ivDropdown2.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24);
                 ivDropdown2.setTag("2");
+                rvAllFriend.setVisibility(View.VISIBLE);
             }
             else{
                 ivDropdown2.setImageResource(R.drawable.ic_baseline_arrow_right_24);
                 ivDropdown2.setTag("1");
+                rvAllFriend.setVisibility(View.GONE);
             }
         });
 
@@ -198,6 +187,23 @@ public class HomeFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             listFriends.clear();
             listFriends.addAll(db.friendsDAO().getFriends());
+            ArrayList<Friends> listRequested = new ArrayList<>();
+            ArrayList<Friends> listAllFriends = new ArrayList<>();
+            for(Friends f:listFriends){
+
+
+                if(f.getStatus() == 0){
+                    listRequested.add(f);
+                    Log.d("List Request: ",listRequested.toString());
+                    requestedFriendsAdapter = new RequestedFriendsAdapter(getContext(),listRequested,listUser);
+                    rvRequestFriend.setAdapter(requestedFriendsAdapter);
+                }
+                else{
+                    listAllFriends.add(f);
+                    allFriendsAdapter = new AllFriendsAdapter(getContext(),listAllFriends,listUser);
+                    rvAllFriend.setAdapter(allFriendsAdapter);
+                }
+            }
             return null;
         }
 
