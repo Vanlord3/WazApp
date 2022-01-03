@@ -23,7 +23,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 
 public class SettingsActivity extends AppCompatActivity {
-//    ActivitySettingsBinding binding;
+    ActivitySettingsBinding binding;
     FirebaseStorage storage;
     FirebaseAuth auth;
     FirebaseDatabase database;
@@ -32,7 +32,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         getSupportActionBar().hide();
 
@@ -69,10 +70,10 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         User users = snapshot.getValue(User.class);
-                        Picasso.get()
-                                .load(users.getProfilepic())
-                                .placeholder(R.drawable.avatar)
-                                .into(binding.profileImage);
+//                        Picasso.get()
+//                                .load(users.getProfilepic())
+//                                .placeholder(R.drawable.avatar)
+//                                .into(binding.profileImage);
 
                         binding.etStatus.setText(users.getStatus());
                         binding.etUserName.setText(users.getUserName());
