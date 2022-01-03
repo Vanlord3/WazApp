@@ -40,7 +40,7 @@ public class Registers extends AppCompatActivity {
 
     AppDatabase db;
     ProgressDialog progressDialog;
-
+    FirebaseDatabase database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +92,8 @@ public class Registers extends AppCompatActivity {
                             String a = firebaseUser.getUid();
                             User u = new User(a,username,name,email,password);
                             new insertUser().execute(u);
+
+                            database.getReference().child("Users").child(username).setValue(u);
                             UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name)
                                     .build();
