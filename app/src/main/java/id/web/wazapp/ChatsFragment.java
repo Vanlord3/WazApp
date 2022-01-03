@@ -18,6 +18,8 @@ import com.google.firebase.database.ValueEventListener;
 //import id.web.wazapp.databinding.FragmentChatsBinding;
 import java.util.ArrayList;
 
+import id.web.wazapp.databinding.FragmentChatsBinding;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ChatsFragment#newInstance} factory method to

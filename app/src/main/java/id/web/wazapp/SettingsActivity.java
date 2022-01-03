@@ -22,6 +22,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
+import id.web.wazapp.databinding.ActivitySettingsBinding;
+
 public class SettingsActivity extends AppCompatActivity {
     ActivitySettingsBinding binding;
     FirebaseStorage storage;
@@ -75,8 +77,8 @@ public class SettingsActivity extends AppCompatActivity {
 //                                .placeholder(R.drawable.avatar)
 //                                .into(binding.profileImage);
 
-                        binding.etStatus.setText(users.getStatus());
-                        binding.etUserName.setText(users.getUserName());
+                        //binding.etStatus.setText(users.getStatus());
+                        binding.etUserName.setText(users.getUsername());
                     }
 
                     @Override
