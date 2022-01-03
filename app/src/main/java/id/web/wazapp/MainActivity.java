@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import id.web.wazapp.databinding.ActivityMainBinding;
+
 public class MainActivity extends AppCompatActivity {
     //Var
     public static int SPLASH_SCR = 5000;

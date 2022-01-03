@@ -77,7 +77,11 @@ public class SettingsActivity extends AppCompatActivity {
 //                                .placeholder(R.drawable.avatar)
 //                                .into(binding.profileImage);
 
+<<<<<<< Updated upstream
                         //binding.etStatus.setText(users.getStatus());
+=======
+                        //binding.etStatus.setText(users.get);
+>>>>>>> Stashed changes
                         binding.etUserName.setText(users.getUsername());
                     }
 
